@@ -1,7 +1,14 @@
+---
+name: Feature Update
+about: I updated an existing feature
+
+---
+
 ### Checklist
 <!--
 Replace the empty checkboxes [ ] below with checked ones [x] accordingly
 -->
+- [ ] I have read the [CONTRIBUTING](../CONTRIBUTING.md) guidelines
 - [ ] The coding style is consistent with the rest of the library
 - [x] ~~I have ran `clang-tidy` without any warnings/errors~~ **Not implemented yet**
 - [x] ~~I have ran `clang-format` without any warnings/errors~~ **Not implemented yet**
@@ -9,7 +16,7 @@ Replace the empty checkboxes [ ] below with checked ones [x] accordingly
       at least one of the following practices:
   * Rebasing my branch off of the branch being merged to
   * Squashing commits to create a more cohesive history
-- [ ] I have unit-tested my fix, or have added new unit tests for my
+- [ ] I have unit-tested my change, or have added new unit tests for my
       contribution
 
 ----------
