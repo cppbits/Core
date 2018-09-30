@@ -42,8 +42,7 @@ fi
 (
   cd "${repo_root}"
   # Deploy to conan
-  echo conan remote add cppbits https://api.bintray.com/conan/cppbits/conan
-  echo conan user -p "${BINTRAY_API_KEY}" -r cppbits cppbits
+  conan user -p "${BINTRAY_API_KEY}" -r cppbits cppbits
 
   conan create . "cppbits/${channel}"
   conan upload "CppBitsCore/*" -r cppbits --all --confirm
