@@ -29,6 +29,8 @@ branches:
 matrix:
   include:
 
+    - stage: test
+
     #################
     # macOS : clang #
     #################
@@ -253,16 +255,17 @@ matrix:
 ##############################################################################
 
 install:
-  # Get CMake and ninja, on Mac
+  # Get CMake, ninja, and python3 (for pip) on Mac
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       brew update
-      brew install cmake ninja
-      brew upgrade cmake
+      brew install cmake ninja python3
+      brew upgrade cmake python3
     fi
 
   # Install conan
-  - pip3 install conan
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then pip3 install conan; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then pip install conan; fi
 
 ##############################################################################
 # 2. Build Step
