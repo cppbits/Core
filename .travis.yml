@@ -268,8 +268,8 @@ install:
     fi
 
   # Install conan
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then pip3 install --user conan fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then pip3.6 install --user conan fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then pip3 install --user conan; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then pip3.6 install --user conan; fi
 
 ##############################################################################
 # 2. Build Step
