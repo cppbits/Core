@@ -4,9 +4,24 @@ cmake_minimum_required(VERSION 3.1)
 # Test Options
 ##############################################################################
 
-option(BIT_CORE_ENABLE_ASAN "Compile and run the address sanetizer" OFF)
-option(BIT_CORE_ENABLE_USAN "Compile and run the undefined behavior sanitizer" OFF)
-option(BIT_CORE_ENABLE_TSAN "Compile and run the thread sanitizer" OFF)
+option(BIT_CORE_ENABLE_SANITIZER "Compile and run with sanitizers" OFF)
+option(BIT_CORE_ENABLE_COVERAGE "Compile with coverage information" OFF)
+option(BIT_CORE_ENABLE_VALGRIND "Compile and run with valgrind" OFF)
+
+##############################################################################
+# Address Sanitizer
+##############################################################################
+
+if( BIT_CORE_ENABLE_SANITIZER AND NOT MSVC )
+  add_compile_options(
+    -g
+    -O2
+    -fno-omit-frame-pointer
+    -fsanitize=address
+    -fsanitize=leak
+    -fsanitize=undefined
+  )
+endif()
 
 ##############################################################################
 # Unit Tests
@@ -56,60 +71,4 @@ add_test( NAME "core_test_all"
           WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
           COMMAND "$<TARGET_FILE:core_test>" "*" )
 
-##############################################################################
-# Address Sanitizer
-##############################################################################
 
-if( BIT_CORE_ENABLE_ASAN )
-
-  add_executable(core_test ${sources})
-  target_link_libraries(core_test PRIVATE
-    -fsanitize=address
-    -fsanitize=leak
-    -fuse-ld=gold
-  )
-
-  target_compile_options(core_test PRIVATE
-    -g
-    -O1
-    -fno-omit-frame-pointer
-    -fsanitize=address
-    -fsanitize=leak
-    -fuse-ld=gold
-  )
-
-endif()
-
-##############################################################################
-# Undefined Behavior Sanitizer
-##############################################################################
-
-if( BIT_CORE_ENABLE_UBSAN )
-
-  target_compile_options(core_test PRIVATE
-    -fsanitize=undefined
-    -fuse-ld=gold
-  )
-  target_link_libraries(core_test PRIVATE
-    -fsanitize=undefined
-    -fuse-ld=gold
-  )
-
-endif()
-
-##############################################################################
-# Thread Sanitizer
-##############################################################################
-
-if( BIT_CORE_ENABLE_TSAN )
-
-  target_compile_options(core_test PRIVATE
-    -fsanitize=thread
-    -fuse-ld=gold
-  )
-  target_link_libraries(core_test PRIVATE
-    -fsanitize=thread
-    -fuse-ld=gold
-  )
-
-endif()
