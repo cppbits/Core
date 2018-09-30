@@ -124,9 +124,9 @@ namespace bit {
     /// \param key the key into the container
     /// \return reference to the entry
     template<typename C, typename Key>
-    auto at( C& c, Key&& key ) -> decltype(c.at( std::forward<Key>(key) ));
+    auto at( C& c, Key&& key ) -> decltype(std::declval<C&>().at( std::forward<Key>(key) ));
     template<typename C, typename Key>
-    auto at( const C& c, Key&& key ) -> decltype(c.at( std::forward<Key>(key) ));
+    auto at( const C& c, Key&& key ) -> decltype(std::declval<C&>().at( std::forward<Key>(key) ));
     /// \}
 
     //-------------------------------------------------------------------------
@@ -153,9 +153,9 @@ namespace bit {
     /// \param c the container
     /// \return pointer to the data
     template<typename C>
-    constexpr auto data( C& c ) -> decltype(c.data());
+    constexpr auto data( C& c ) -> decltype(std::declval<C&>().data());
     template<typename C>
-    constexpr auto data( const C& c ) -> decltype(c.data());
+    constexpr auto data( const C& c ) -> decltype(std::declval<C&>().data());
     /// \}
 
     //-------------------------------------------------------------------------
@@ -181,9 +181,11 @@ namespace bit {
     /// \param c the container
     /// \return reference to the first entry
     template<typename C>
-    constexpr auto front( C& c ) noexcept -> decltype(c.front());
+    constexpr auto front( C& c ) noexcept
+      -> decltype(std::declval<C&>().front());
     template<typename C>
-    constexpr auto front( const C& c ) noexcept -> decltype(c.front());
+    constexpr auto front( const C& c ) noexcept
+      -> decltype(std::declval<const C&>().front());
     /// \}
 
     //-------------------------------------------------------------------------
@@ -209,9 +211,11 @@ namespace bit {
     /// \param c the container
     /// \return reference to the last entry
     template<typename C>
-    constexpr auto back( C& c ) noexcept -> decltype(c.back());
+    constexpr auto back( C& c ) noexcept
+      -> decltype( std::declval<C&>().back());
     template<typename C>
-    constexpr auto back( const C& c ) noexcept -> decltype(c.back());
+    constexpr auto back( const C& c ) noexcept
+      -> decltype( std::declval<const C&>().back());
     /// \}
 
     //-------------------------------------------------------------------------
@@ -229,7 +233,8 @@ namespace bit {
     /// \param c the container
     /// \return the size of the container
     template<typename C>
-    constexpr auto size( const C& c ) noexcept -> decltype(c.size());
+    constexpr auto size( const C& c ) noexcept
+      -> decltype(std::declval<const C&>().size());
 
     //-------------------------------------------------------------------------
 
@@ -256,7 +261,8 @@ namespace bit {
     /// \param c the container
     /// \return \c true if the container is empty
     template<typename C>
-    constexpr auto empty( const C& c ) noexcept -> decltype(c.empty());
+    constexpr auto empty( const C& c ) noexcept
+      -> decltype(std::declval<const C&>().empty());
 
     //-------------------------------------------------------------------------
 

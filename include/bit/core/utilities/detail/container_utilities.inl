@@ -52,13 +52,15 @@ inline constexpr const T* bit::core::data( std::initializer_list<T> il )
 }
 
 template<typename C>
-inline constexpr auto bit::core::data( C& c ) -> decltype(c.data())
+inline constexpr auto bit::core::data( C& c )
+  -> decltype( std::declval<C&>().data())
 {
     return c.data();
 }
 
 template<typename C>
-inline constexpr auto bit::core::data( const C& c ) -> decltype(c.data())
+inline constexpr auto bit::core::data( const C& c )
+  -> decltype(std::declval<const C&>().data())
 {
     return c.data();
 }
@@ -111,18 +113,19 @@ inline constexpr T& bit::core::back( std::initializer_list<T> il )
 
 template<typename C>
 inline constexpr auto bit::core::back( C& c )
-  noexcept -> decltype(c.front())
+  noexcept
+  -> decltype(std::declval<C&>().front())
 {
   return c.back();
 }
 
 template<typename C>
 inline constexpr auto bit::core::back( const C& c )
-  noexcept -> decltype(c.back())
+  noexcept
+  -> decltype(std::declval<const C&>().back())
 {
   return c.back();
 }
-
 
 //-------------------------------------------------------------------------
 
@@ -135,7 +138,7 @@ inline constexpr std::size_t bit::core::size( T(&array)[N] )
 
 template<typename C>
 inline constexpr auto bit::core::size( const C& c )
-  noexcept -> decltype(c.size())
+  noexcept -> decltype(std::declval<const C&>().size())
 {
   return c.size();
 }
@@ -158,7 +161,8 @@ inline constexpr bool bit::core::empty( std::initializer_list<T> il )
 
 template<typename C>
 inline constexpr auto bit::core::empty( const C& c )
-  noexcept -> decltype(c.empty())
+  noexcept
+  -> decltype(std::declval<const C&>().empty())
 {
   return c.empty();
 }
