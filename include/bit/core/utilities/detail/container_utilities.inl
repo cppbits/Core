@@ -101,7 +101,11 @@ namespace bit { namespace core { namespace detail {
   template<typename C>
   struct underlying_container_extractor : private C
   {
-    static underlying_container_type_t<C> get( C& container )
+    static underlying_container_type_t<C>& get( C& container )
+    {
+      return (container.*&underlying_container_extractor::c);
+    }
+    static const underlying_container_type_t<C>& get( const C& container )
     {
       return (container.*&underlying_container_extractor::c);
     }
@@ -122,26 +126,7 @@ inline const bit::core::underlying_container_type_t<C>&
   bit::core::get_underlying_container( const C& container )
 {
   using extractor_type = detail::underlying_container_extractor<C>;
-
   return extractor_type::get( container );
-}
-
-template<typename C>
-inline bit::core::underlying_container_type_t<C>&&
-  bit::core::get_underlying_container( C&& container )
-{
-  using extractor_type = detail::underlying_container_extractor<C>;
-
-  return std::move( extractor_type::get( container ) );
-}
-
-template<typename C>
-inline const bit::core::underlying_container_type_t<C>&&
-  bit::core::get_underlying_container( const C&& container )
-{
-  using extractor_type = detail::underlying_container_extractor<C>;
-
-  return std::move( extractor_type::get( container ) );
 }
 
 #endif //BIT_CORE_UTILITIES_DETAIL_CONTAINER_UTILITIES_INL

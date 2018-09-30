@@ -78,10 +78,10 @@ namespace bit {
     private:
       struct I : private T
       {
-        using type = detail::type_of_member_ptr_t<decltype(&I::c)>;
+        using T::c;
       };
     public:
-      using type = typename I::type;
+      using type = detail::type_of_member_ptr_t<decltype(&I::c)>;
     };
 
     //-------------------------------------------------------------------------
@@ -308,10 +308,6 @@ namespace bit {
     underlying_container_type_t<C>& get_underlying_container( C& container );
     template<typename C>
     const underlying_container_type_t<C>& get_underlying_container( const C& container );
-    template<typename C>
-    underlying_container_type_t<C>&& get_underlying_container( C&& container );
-    template<typename C>
-    const underlying_container_type_t<C>&& get_underlying_container( const C&& container );
     /// \}
 
   } // namespace core
