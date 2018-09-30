@@ -11,7 +11,7 @@
 #include <string> // std::string
 #include <memory> // std::unique_ptr
 
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 
 static_assert( std::is_trivially_destructible<bit::core::variant<int,bool>>::value,
                "Variant containing trivially destructible types must be trivially destructible" );

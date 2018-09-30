@@ -5,7 +5,7 @@
 
 #include <bit/core/memory/exclusive_ptr.hpp>
 
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 
 namespace
 {

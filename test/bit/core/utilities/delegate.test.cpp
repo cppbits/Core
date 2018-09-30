@@ -5,7 +5,7 @@
 
 #include <bit/core/utilities/delegate.hpp>
 
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 
 namespace {
 

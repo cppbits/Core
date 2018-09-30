@@ -5,7 +5,7 @@
 
 #include <bit/core/utilities/scope_guard.hpp>
 
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 
 TEST_CASE("bit::core::on_scope_exit( Fn&& fn )", "[raii]")
 {

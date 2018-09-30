@@ -9,7 +9,7 @@
 #include <string>
 #include <cstring>
 
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 
 //============================================================================
 // basic_string_view
@@ -76,7 +76,6 @@ TEST_CASE("string_view::string_view( const char* )","[ctor]")
 
   SECTION("Is non-empty with non-empty string")
   {
-    const char* str = "Hello world";
     bit::core::string_view view = non_empty_str;
 
     REQUIRE_FALSE( view.empty() );

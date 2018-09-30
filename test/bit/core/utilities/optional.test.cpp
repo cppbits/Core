@@ -5,7 +5,7 @@
 
 #include <bit/core/utilities/optional.hpp>
 
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 
 namespace {
 
@@ -147,8 +147,6 @@ TEST_CASE("optional::optional( nullopt_t )","[ctor]")
 
 TEST_CASE("optional::optional( const optional& )","[ctor]")
 {
-  auto is_called = false;
-
   SECTION("Copying a null optional")
   {
     auto original  = bit::core::optional<int>();

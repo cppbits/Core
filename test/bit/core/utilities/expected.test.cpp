@@ -4,7 +4,7 @@
  *****************************************************************************/
 #include <bit/core/utilities/expected.hpp>
 
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 
 #include <system_error>
 

@@ -8,7 +8,7 @@
 #include <algorithm> // std::equal
 #include <utility>   // std::move
 
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 
 namespace {
   struct copyable
