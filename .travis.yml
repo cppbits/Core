@@ -8,6 +8,11 @@ language: cpp
 dist: trusty
 sudo: required
 group: edge
+addons:
+  apt:
+    packages:
+      - "python3"
+      - "python3-pip"
 
 ##############################################################################
 # branch settings
@@ -248,17 +253,16 @@ matrix:
 ##############################################################################
 
 install:
-  # Get CMake, ninja, and pip on Mac
+  # Get CMake and ninja, on Mac
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       brew update
       brew install cmake ninja
       brew upgrade cmake
-      sudo easy_install pip
     fi
 
   # Install conan
-  - pip install conan
+  - pip3 install conan
 
 ##############################################################################
 # 2. Build Step
