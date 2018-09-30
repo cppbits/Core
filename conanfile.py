@@ -2,8 +2,9 @@
 
 from conans import ConanFile, CMake, tools
 
-def extract_cmake_version():
+def get_version():
     import re
+    import os
 
     try:
         content = tools.load("CMakeLists.txt")
@@ -11,13 +12,20 @@ def extract_cmake_version():
         minor   = re.search(".*BIT_CORE_VERSION_MINOR ([0-9]+) .*", content).group(1)
         patch   = re.search(".*BIT_CORE_VERSION_PATCH ([0-9]+) .*", content).group(1)
 
-        return "{}.{}.{}".format(major,minor,patch)
+        version = "{}.{}.{}".format(major,minor,patch)
+
+        # Append build number if coming from a server
+        build = os.getenv("BUILD_SUFFIX")
+        if build is not None:
+            version="{}-{}".format(version,build)
+
+        return version
     except Exception:
         return None
 
 class CppBitsCoreConan(ConanFile):
     name = "CppBitsCore"
-    version = extract_cmake_version()
+    version = get_version()
     description = "A header-only standard template library"
     author = "cppbits"
     generators = "cmake"
