@@ -30,26 +30,26 @@ find_package(Catch2 REQUIRED)
 
 set(sources
       # utilities
-      bit/core/utilities/compressed_pair.test.cpp
-      bit/core/utilities/delegate.test.cpp
-      bit/core/utilities/lazy.test.cpp
-      bit/core/utilities/optional.test.cpp
-      bit/core/utilities/tribool.test.cpp
-      bit/core/utilities/expected.test.cpp
-      bit/core/utilities/variant.test.cpp
+      src/bit/core/utilities/compressed_pair.test.cpp
+      src/bit/core/utilities/delegate.test.cpp
+      src/bit/core/utilities/lazy.test.cpp
+      src/bit/core/utilities/optional.test.cpp
+      src/bit/core/utilities/tribool.test.cpp
+      src/bit/core/utilities/expected.test.cpp
+      src/bit/core/utilities/variant.test.cpp
 
       # containers
-      bit/core/containers/array_view.test.cpp
-      bit/core/containers/set_view.test.cpp
-      bit/core/containers/span.test.cpp
-      bit/core/containers/string_view.test.cpp
-      bit/core/containers/ring_deque.test.cpp
-      bit/core/containers/ring_buffer.test.cpp
+      src/bit/core/containers/array_view.test.cpp
+      src/bit/core/containers/set_view.test.cpp
+      src/bit/core/containers/span.test.cpp
+      src/bit/core/containers/string_view.test.cpp
+      src/bit/core/containers/ring_deque.test.cpp
+      src/bit/core/containers/ring_buffer.test.cpp
 
       # memory
-      bit/core/memory/exclusive_ptr.test.cpp
+      src/bit/core/memory/exclusive_ptr.test.cpp
 
-      main.test.cpp
+      src/main.test.cpp
 )
 
 add_executable(core_test ${sources})
