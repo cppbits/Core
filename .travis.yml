@@ -52,24 +52,6 @@ matrix:
     # Linux : GCC #
     ###############
 
-    - name: "Linux g++-4.8 unit tests"
-      os: linux
-      compiler: gcc
-      env: COMPILER=g++-4.8
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-4.8', 'ninja-build']
-
-    - name: "Linux g++-4.9 unit tests"
-      os: linux
-      compiler: gcc
-      env: COMPILER=g++-4.9
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-4.9', 'ninja-build']
-
     - name: "Linux g++-5 unit tests"
       os: linux
       compiler: gcc
