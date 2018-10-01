@@ -82,7 +82,7 @@ before_build:
   - mkdir build
   - cd build
   - conan install .. -odev_setup=True
-  - cmake .. -G "%GENERATOR%" -DCMAKE_CXX_FLAGS="%FLAGS%" -DCMAKE_IGNORE_PATH="C:/Program Files/Git/usr/bin"
+  - cmake .. -G "%GENERATOR%" -DBIT_CORE_COMPILE_UNIT_TESTS=On -DBIT_CORE_COMPILE_SELF_CONTAINMENT_TESTS=On -DCMAKE_CXX_FLAGS="%FLAGS%" -DCMAKE_IGNORE_PATH="C:/Program Files/Git/usr/bin"
 
 build_script:
   - cmake --build . --config Release
