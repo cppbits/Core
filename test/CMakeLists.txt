@@ -18,7 +18,6 @@ if( BIT_CORE_ENABLE_SANITIZER AND NOT MSVC )
     -O2
     -fno-omit-frame-pointer
     -fsanitize=address
-    -fsanitize=leak
     -fsanitize=undefined
   )
 endif()
@@ -37,7 +36,6 @@ set(sources
       bit/core/utilities/optional.test.cpp
       bit/core/utilities/tribool.test.cpp
       bit/core/utilities/expected.test.cpp
-      bit/core/utilities/scope_guard.test.cpp
       bit/core/utilities/variant.test.cpp
 
       # containers
