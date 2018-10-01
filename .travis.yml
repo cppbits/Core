@@ -257,6 +257,13 @@ matrix:
 # 1. Install Step
 ##############################################################################
 
+before_install:
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      sudo apt-get update
+      sudo apt-get install python3-pip
+    fi
+
 install:
   # Get CMake, ninja, pip, and Conan on Mac
   - |
@@ -266,16 +273,9 @@ install:
       # Some OSX versions fail if already installed, so || this with true
       brew install cmake ninja python3 || true
       brew upgrade cmake python3 || true
-      pip3 install conan
     fi
 
-  # Get pip and conan on Linux
-  - |
-    if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-      python3 -m pip || curl https://bootstrap.pypa.io/get-pip.py | sudo python3
-      python3 -m pip install pip
-      pip3 install conan
-    fi
+  - pip3 install conan
 
 ##############################################################################
 # 2. Build Step
