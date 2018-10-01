@@ -37,16 +37,16 @@ matrix:
     # Linux : clang sanitizer #
     ###########################
 
-    - name: "Linux clang++-5.0 UB sanitizer"
-      os: linux
-      compiler: clang
-      env:
-        - COMPILER=clang++-5.0
-        - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_SANITIZER=On -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold"
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-5.0']
-          packages: ['g++-6', 'clang-5.0', 'ninja-build']
+    # - name: "Linux clang++-5.0 UB sanitizer"
+    #   os: linux
+    #   compiler: clang
+    #   env:
+    #     - COMPILER=clang++-5.0
+    #     - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_SANITIZER=On -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold"
+    #   addons:
+    #     apt:
+    #       sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-5.0']
+    #       packages: ['g++-6', 'clang-5.0', 'ninja-build']
 
     ###############
     # Linux : GCC #
