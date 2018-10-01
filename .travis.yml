@@ -42,7 +42,7 @@ matrix:
       compiler: clang
       env:
         - COMPILER=clang++-6.0
-        - CMAKE_OPTIONS=-DBIT_CORE_ENABLE_SANITIZER=On
+        - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_SANITIZER=On -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold"
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-6.0']
