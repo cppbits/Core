@@ -9,6 +9,7 @@
 class bit::core::detail::exclusive_ptr_control_block
 {
 public:
+  virtual ~exclusive_ptr_control_block() = default;
 
   virtual void destroy() = 0;
 
@@ -20,7 +21,7 @@ public:
 //=============================================================================
 
 template<typename T, typename Allocator>
-class bit::core::detail::exclusive_ptr_emplace
+class bit::core::detail::exclusive_ptr_emplace final
   : public bit::core::detail::exclusive_ptr_control_block
 {
 public:
@@ -96,7 +97,7 @@ inline T* bit::core::detail::exclusive_ptr_emplace<T,Allocator>::get()
 //=============================================================================
 
 template<typename T, typename Deleter, typename Allocator>
-class bit::core::detail::exclusive_ptr_pointer
+class bit::core::detail::exclusive_ptr_pointer final
   : public bit::core::detail::exclusive_ptr_control_block
 {
 public:
@@ -113,7 +114,7 @@ public:
 
 private:
 
-  ::bit::core::compressed_tuple<T, Deleter, Allocator> m_storage;
+  ::bit::core::compressed_tuple<T*, Deleter, Allocator> m_storage;
 };
 
 template<typename T, typename Deleter, typename Allocator>
@@ -269,7 +270,7 @@ inline constexpr bit::core::exclusive_ptr<T>::exclusive_ptr( std::nullptr_t )
 template<typename T>
 template<typename Y, typename>
 inline bit::core::exclusive_ptr<T>::exclusive_ptr( Y* ptr )
-  : exclusive_ptr( ptr, std::default_delete<Y>{} )
+  : exclusive_ptr( ptr, std::default_delete<T>{} )
 {
 
 }
@@ -285,7 +286,7 @@ inline bit::core::exclusive_ptr<T>::exclusive_ptr( Y* ptr, Deleter deleter )
 template<typename T>
 template<typename Deleter>
 inline bit::core::exclusive_ptr<T>::exclusive_ptr( std::nullptr_t,
-                                                  Deleter deleter )
+                                                   Deleter deleter )
   : exclusive_ptr( static_cast<T*>(nullptr), deleter )
 {
 
@@ -403,7 +404,7 @@ template<typename T>
 template<typename Y, typename>
 inline void bit::core::exclusive_ptr<T>::reset( Y* ptr )
 {
-  reset( ptr, std::default_delete<Y>{} );
+  reset( ptr, std::default_delete<T>{} );
 }
 
 template<typename T>

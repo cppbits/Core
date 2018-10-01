@@ -15,7 +15,7 @@ namespace
     virtual ~base() = default;
   };
 
-  class derived : public base{};
+  class derived final : public base{};
 }
 
 //=============================================================================
