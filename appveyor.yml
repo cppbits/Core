@@ -1,0 +1,97 @@
+##############################################################################
+# project configuration
+##############################################################################
+
+version: '{build}'
+
+##############################################################################
+# build matrix
+##############################################################################
+
+environment:
+  matrix:
+
+    ##############################
+    # Visual Studio 2017 : MinGW #
+    ##############################
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      COMPILER: mingw
+      platform: x86
+      FLAGS: ""
+      GENERATOR: Ninja
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      COMPILER: mingw
+      platform: x64
+      FLAGS: ""
+      GENERATOR: Ninja
+
+    ############################
+    # Visual Studio 2017 : x86 #
+    ############################
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      platform: x86
+      FLAGS: ""
+      GENERATOR: Visual Studio 15 2017
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      platform: x86
+      FLAGS: "/permissive- /std:c++latest /utf-8"
+      GENERATOR: Visual Studio 15 2017
+
+    ############################
+    # Visual Studio 2017 : x64 #
+    ############################
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      platform: x64
+      FLAGS: ""
+      GENERATOR: Visual Studio 15 2017
+
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      platform: x64
+      FLAGS: "/permissive- /std:c++latest /utf-8"
+      GENERATOR: Visual Studio 15 2017
+
+##############################################################################
+# Installation
+##############################################################################
+
+install:
+  - if "%COMPILER%"=="mingw" appveyor DownloadFile https://github.com/ninja-build/ninja/releases/download/v1.6.0/ninja-win.zip -FileName ninja.zip
+  - if "%COMPILER%"=="mingw" 7z x ninja.zip -oC:\projects\deps\ninja > nul
+  - if "%COMPILER%"=="mingw" set PATH=C:\projects\deps\ninja;%PATH%
+  - if "%COMPILER%"=="mingw" set PATH=C:\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0\mingw64\bin;%PATH%
+  - if "%COMPILER%"=="mingw" g++ --version
+  - set PATH=%PATH%;%PYTHON%/Scripts/
+  - pip.exe install conan
+  - conan remote add cppbits https://api.bintray.com/conan/cppbits/conan
+  - conan user
+
+init:
+  - cmake --version
+  - msbuild /version
+  - conan --version
+  - ninja --version
+
+##############################################################################
+# Compile
+##############################################################################
+
+before_build:
+  - mkdir build
+  - cd build
+  - conan install .. -odev_setup=True
+  - cmake .. -G "%GENERATOR%" -DCMAKE_CXX_FLAGS="%FLAGS%" -DCMAKE_IGNORE_PATH="C:/Program Files/Git/usr/bin"
+
+build_script:
+  - cmake --build . --config Release
+
+##############################################################################
+# Test
+##############################################################################
+
+test_script:
+  - ctest -C Release -V -j --output-on-failure
