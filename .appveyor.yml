@@ -59,6 +59,10 @@ environment:
 # Installation
 ##############################################################################
 
+init:
+  - cmake --version
+  - msbuild /version
+
 install:
   - if "%COMPILER%"=="mingw" appveyor DownloadFile https://github.com/ninja-build/ninja/releases/download/v1.6.0/ninja-win.zip -FileName ninja.zip
   - if "%COMPILER%"=="mingw" 7z x ninja.zip -oC:\projects\deps\ninja > nul
@@ -69,12 +73,6 @@ install:
   - pip.exe install conan
   - conan remote add cppbits https://api.bintray.com/conan/cppbits/conan
   - conan user
-
-init:
-  - cmake --version
-  - msbuild /version
-  - conan --version
-  - ninja --version
 
 ##############################################################################
 # Compile
