@@ -258,7 +258,7 @@ matrix:
 ##############################################################################
 
 install:
-  # Get CMake, ninja, and python3 (for pip) on Mac
+  # Get CMake, ninja, pip, and Conan on Mac
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       brew update
@@ -266,16 +266,14 @@ install:
       # Some OSX versions fail if already installed, so || this with true
       brew install cmake ninja python3 || true
       brew upgrade cmake python3 || true
-    fi
-
-  # Install conan
-  - |
-    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       pip3 install conan
     fi
+
+  # Get pip and conan on Linux
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-      pyenv use system 3.6
+      python3 -m pip || curl https://bootstrap.pypa.io/get-pip.py | sudo python3
+      python3 -m pip install pip
       pip3 install conan
     fi
 
