@@ -386,7 +386,7 @@ inline constexpr bit::core::basic_zstring_span<CharT,Traits,Extent>::
 //----------------------------------------------------------------------------
 
 template<typename CharT, typename Traits, std::ptrdiff_t Extent>
-inline constexpr typename bit::core::basic_zstring_span<CharT,Traits,Extent>::const_pointer
+inline constexpr const CharT*
   bit::core::basic_zstring_span<CharT,Traits,Extent>::c_str()
   const noexcept
 {

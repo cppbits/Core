@@ -739,7 +739,7 @@ namespace bit {
       /// \brief Gets the data of the current basic_zstring_view
       ///
       /// \return the data this basic_zstring_view contains
-      constexpr const value_type* c_str() const noexcept;
+      constexpr const CharT* c_str() const noexcept;
 
     };
 

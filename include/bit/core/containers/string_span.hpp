@@ -517,7 +517,7 @@ namespace bit {
       /// \brief Gets the data of the current basic_zstring_span
       ///
       /// \return pointer to the null-terminated string
-      constexpr const_pointer c_str() const noexcept;
+      constexpr const CharT* c_str() const noexcept;
 
     };
   } // namespace core

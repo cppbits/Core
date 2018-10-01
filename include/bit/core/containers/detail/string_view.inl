@@ -684,7 +684,7 @@ constexpr bit::core::basic_zstring_view<CharT,Traits>::
 //----------------------------------------------------------------------------
 
 template<typename CharT, typename Traits>
-constexpr const typename bit::core::basic_zstring_view<CharT,Traits>::value_type*
+constexpr const CharT*
   bit::core::basic_zstring_view<CharT,Traits>::c_str()
   const noexcept
 {
