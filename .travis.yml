@@ -30,6 +30,10 @@ branches:
 # build matrix
 ##############################################################################
 
+stages:
+  - test
+  - deploy
+
 matrix:
   include:
 
@@ -234,6 +238,39 @@ matrix:
       compiler: clang
       env: COMPILER=clang++
 
+    ##########
+    # Deploy #
+    ##########
+
+    - stage: deploy
+      name: "Linux g++-8 unit tests"
+      os: linux
+      compiler: gcc
+      env: COMPILER=g++-8
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-8']
+      script: skip
+      deploy:
+        # Deploy testing conan packages on develop
+        - provider: script
+          script: bash .ci/deploy_conan.sh "testing" "-${TRAVIS_BUILD_NUMBER}"
+          on:
+            branch: develop
+
+        # Deploy stable conan packages on master
+        - provider: script
+          script: bash .ci/deploy_conan.sh "stable"
+          on:
+            branch: master
+
+        # Deploy doxygen documentation on master
+        - provider: script
+          script: bash .ci/deploy_doxygen.sh
+          on:
+            branch: master
+
 
 ##############################################################################
 # 1. Install Step
@@ -296,26 +333,3 @@ script:
   - cmake --build . --config Release
   - ctest -C Release -V -j --output-on-failure
   - cd ..
-
-##############################################################################
-# 3. Deploy Step
-##############################################################################
-
-deploy:
-  # Deploy testing conan packages on develop
-  - provider: script
-    script: bash .ci/deploy_conan.sh "testing" "-${TRAVIS_BUILD_NUMBER}"
-    on:
-      branch: develop
-
-  # Deploy stable conan packages on master
-  - provider: script
-    script: bash .ci/deploy_conan.sh "stable"
-    on:
-      branch: master
-
-  # Deploy doxygen documentation on master
-  - provider: script
-    script: bash .ci/deploy_doxygen.sh
-    on:
-      branch: master
