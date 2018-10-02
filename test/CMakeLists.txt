@@ -1,0 +1,72 @@
+cmake_minimum_required(VERSION 3.1)
+
+##############################################################################
+# Test Options
+##############################################################################
+
+option(BIT_CORE_ENABLE_SANITIZER "Compile and run with sanitizers" OFF)
+option(BIT_CORE_ENABLE_COVERAGE "Compile with coverage information" OFF)
+option(BIT_CORE_ENABLE_VALGRIND "Compile and run with valgrind" OFF)
+
+##############################################################################
+# Address Sanitizer
+##############################################################################
+
+if( BIT_CORE_ENABLE_SANITIZER AND NOT MSVC )
+  add_compile_options(
+    -g
+    -O2
+    -fno-omit-frame-pointer
+    -fsanitize=address
+    -fsanitize=undefined
+  )
+endif()
+
+##############################################################################
+# Unit Tests
+##############################################################################
+
+find_package(Catch2 REQUIRED)
+
+set(sources
+      # utilities
+      src/bit/core/utilities/compressed_pair.test.cpp
+      src/bit/core/utilities/delegate.test.cpp
+      src/bit/core/utilities/lazy.test.cpp
+      src/bit/core/utilities/optional.test.cpp
+      src/bit/core/utilities/tribool.test.cpp
+      src/bit/core/utilities/expected.test.cpp
+      src/bit/core/utilities/variant.test.cpp
+
+      # containers
+      src/bit/core/containers/array_view.test.cpp
+      src/bit/core/containers/set_view.test.cpp
+      src/bit/core/containers/span.test.cpp
+      src/bit/core/containers/string_view.test.cpp
+      src/bit/core/containers/ring_deque.test.cpp
+      src/bit/core/containers/ring_buffer.test.cpp
+
+      # memory
+      src/bit/core/memory/exclusive_ptr.test.cpp
+
+      src/main.test.cpp
+)
+
+add_executable(core_test ${sources})
+
+target_link_libraries(core_test PRIVATE
+  CppBits::core
+  Catch2::Catch2
+)
+
+#-----------------------------------------------------------------------------
+
+add_test( NAME "core_test_default"
+          WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+          COMMAND "$<TARGET_FILE:core_test>" )
+
+add_test( NAME "core_test_all"
+          WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+          COMMAND "$<TARGET_FILE:core_test>" "*" )
+
+

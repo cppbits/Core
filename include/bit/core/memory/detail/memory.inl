@@ -1,0 +1,74 @@
+#ifndef BIT_CORE_MEMORY_DETAIL_INL
+#define BIT_CORE_MEMORY_DETAIL_INL
+
+template<typename InputIterator>
+constexpr auto bit::core::address_from( InputIterator& it ) noexcept
+  -> typename std::iterator_traits<InputIterator>::value_type*
+{
+  return std::addressof( *it );
+}
+
+//-----------------------------------------------------------------------------
+
+namespace bit { namespace core { namespace detail {
+
+template<typename T>
+inline constexpr T& dereference(T& ref)
+{
+  return ref;
+}
+
+template<typename T>
+inline constexpr decltype(auto) dereference(T* ptr)
+{
+  return dereference(*ptr);
+}
+
+} } } // namespace bit::core::detail
+
+template<typename T>
+inline constexpr decltype(auto) bit::core::dereference(T& ptr)
+{
+  return detail::dereference(ptr);
+}
+
+inline std::uintptr_t bit::core::to_address( void* ptr )
+  noexcept
+{
+  return reinterpret_cast<std::uintptr_t>(ptr);
+}
+
+inline void* bit::core::from_address( std::uintptr_t address )
+  noexcept
+{
+  return reinterpret_cast<void*>(address);
+}
+
+template<typename T, typename U>
+inline constexpr bool bit::core::deep_compare( const T& lhs, const U& rhs )
+  noexcept
+{
+  return (lhs == rhs) || (lhs && rhs && (*lhs == *rhs));
+}
+
+template<typename T>
+inline constexpr bool bit::core::deep_compare( std::nullptr_t, const T& rhs )
+  noexcept
+{
+  return nullptr == rhs;
+}
+
+template<typename T>
+inline constexpr bool bit::core::deep_compare( const T& lhs, std::nullptr_t )
+  noexcept
+{
+  return lhs == nullptr;
+}
+
+inline constexpr bool bit::core::deep_compare( std::nullptr_t, std::nullptr_t )
+  noexcept
+{
+  return true;
+}
+
+#endif /* BIT_CORE_MEMORY_DETAIL_INL */
