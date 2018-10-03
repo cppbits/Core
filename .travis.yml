@@ -255,13 +255,20 @@ matrix:
       deploy:
         # Deploy testing conan packages on develop
         - provider: script
-          script: bash .ci/deploy_conan.sh "testing" "-${TRAVIS_BUILD_NUMBER}"
+          script: bash .ci/deploy_conan.sh testing
           on:
             branch: develop
 
         # Deploy stable conan packages on master
         - provider: script
-          script: bash .ci/deploy_conan.sh "stable"
+          script: bash .ci/deploy_conan.sh edge
+          on:
+            all_branches: true
+            condition: $TRAVIS_BRANCH =~ ^release/.*$
+
+        # Deploy stable conan packages on master
+        - provider: script
+          script: bash .ci/deploy_conan.sh stable
           on:
             branch: master
 
