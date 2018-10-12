@@ -55,7 +55,7 @@ set(sources
 add_executable(core_test ${sources})
 
 target_link_libraries(core_test PRIVATE
-  CppBits::core
+  CppBits::Core
   Catch2::Catch2
 )
 
