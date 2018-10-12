@@ -45,12 +45,12 @@ elif [[ "$1" == "edge" ]]; then
   # First release branch will always have 0 merges (from the initial push)
   count=$(git rev-list --count --merges HEAD ^develop)
   count=$((count+1))
-  export BUILD_SUFFIX="beta.${count}"
+  export CONAN_VERSION_SUFFIX="beta.${count}"
 elif [[ "$1" == "testing" ]]; then
   hash=$(git rev-parse HEAD)
   count=$(git rev-list --count --merges HEAD ^master)
   count=$((count+1))
-  export BUILD_SUFFIX="alpha.${count}+${hash}"
+  export CONAN_VERSION_SUFFIX="alpha.${count}+${hash}"
 else
   echo >&2 "${0}: error: 1st positional argument must be 1 of 'stable', 'edge', or 'testing'"
   usage

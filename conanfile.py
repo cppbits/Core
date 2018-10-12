@@ -15,7 +15,7 @@ def get_version():
         version = "{}.{}.{}".format(major,minor,patch)
 
         # Append build number if coming from a server
-        build = os.getenv("BUILD_SUFFIX")
+        build = os.getenv("CONAN_VERSION_SUFFIX")
         if build is not None:
             version="{}-{}".format(version,build)
 
