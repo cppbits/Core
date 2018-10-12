@@ -246,25 +246,25 @@ jobs:
     - <<: *deploy_agent
       stage: deploy
       name: "Conan Deploy"
-      if: branch = develop
+      if: branch = develop AND type = push
       script: .travis/deploy_conan.sh testing
 
     - <<: *deploy_agent
       stage: deploy
       name: "Conan Deploy"
-      if: branch ~= ^release/.*$
+      if: branch ~= ^release/.*$ AND type = push
       script: .travis/deploy_conan.sh stable
 
     - <<: *deploy_agent
       stage: deploy
       name: "Conan Deploy"
-      if: branch = master
+      if: branch = master AND type = push
       script: .travis/deploy_conan.sh stable
 
     - <<: *deploy_agent
       stage: deploy
       name: "Deploy Doxygen"
-      if: branch = master
+      if: branch = master AND type = push
       script: .travis/deploy_doxygen.sh
 
 ##############################################################################
