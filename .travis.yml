@@ -289,7 +289,7 @@ install:
       # Some OSX versions fail if already installed, so || this with true
       brew install cmake ninja python3 || true
       brew upgrade cmake python3 || true
-      python3 -m pip install conan
+      python3 -m pip install conan==1.7.4
     fi
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
