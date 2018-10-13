@@ -41,17 +41,27 @@ if [[ "$1" == "stable" ]]; then
   channel="stable"
 elif [[ "$1" == "prerelease" ]]; then
   channel="stable"
+
+  # Change the fetch origin so that we can get the develop hash
+  git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+  git fetch origin develop
+
   # First release branch will always have 0 merges (from the initial push)
-  count=$(git rev-list --count --merges HEAD ^develop)
-  count=$((count+1))
-  export CONAN_VERSION_SUFFIX="prerelease.${count}"
+  commit_count=$(git rev-list --count --no-merges origin/develop..HEAD)
+  commit_count=$((commit_count+1))
+  export CONAN_VERSION_SUFFIX="prerelease.${commit_count}"
 elif [[ "$1" == "edge" ]]; then
   channel="testing"
-  hash=$(git rev-parse HEAD)
+
+  # Change the fetch origin so that we can get the master hash
+  git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+  git fetch origin master
+
   # First release branch will always have 0 merges (from the initial push)
-  count=$(git rev-list --count --merges HEAD ^master)
-  count=$((count+1))
-  export CONAN_VERSION_SUFFIX="snapshot.${count}+sha.${hash}"
+  hash=$(git rev-parse --short HEAD)
+  commit_count=$(git rev-list --count --no-merges origin/master..HEAD)
+  commit_count=$((commit_count+1))
+  export CONAN_VERSION_SUFFIX="snapshot.${commit_count}+sha.${hash}"
 else
   echo >&2 "${0}: error: 1st positional argument must be 1 of 'stable', 'edge', or 'prerelease'"
   usage
