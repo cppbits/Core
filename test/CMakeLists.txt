@@ -15,7 +15,7 @@ option(BIT_CORE_ENABLE_VALGRIND "Compile and run with valgrind" OFF)
 if( BIT_CORE_ENABLE_SANITIZER AND NOT MSVC )
   add_compile_options(
     -g
-    -O1
+    -O2
     -fno-omit-frame-pointer
     -fsanitize=address
     -fsanitize=leak

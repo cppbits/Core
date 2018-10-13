@@ -64,12 +64,12 @@ jobs:
     # Linux : clang sanitizer #
     ###########################
 
-    - name: "Linux clang++-6.0 UB sanitizer"
+    - name: "Linux clang++-6.0 Sanitizers"
       os: linux
       compiler: clang
       env:
         - COMPILER=clang++-6.0
-        - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_SANITIZER=On -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold"
+        - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_SANITIZER=On"
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-6.0']
