@@ -27,26 +27,53 @@ branches:
     - gh-pages
 
 ##############################################################################
-# build matrix
+# Stages
 ##############################################################################
 
-matrix:
+stages:
+  - test
+  - deploy
+
+##############################################################################
+# Agent Setup
+##############################################################################
+
+osx_agent: &osx_agent
+  os: osx
+  language: generic
+  compiler: clang
+  env: COMPILER=clang++
+
+deploy_agent: &deploy_agent
+  os: linux
+  compiler: gcc
+  env: COMPILER=g++-8
+  addons:
+    apt:
+      sources: ['ubuntu-toolchain-r-test']
+      packages: ['g++-8', 'ninja-build']
+
+##############################################################################
+# Jobs
+##############################################################################
+
+jobs:
   include:
 
     ###########################
     # Linux : clang sanitizer #
     ###########################
 
-    # - name: "Linux clang++-5.0 UB sanitizer"
+    # - name: "Linux clang++-6.0 Sanitizers"
     #   os: linux
     #   compiler: clang
     #   env:
-    #     - COMPILER=clang++-5.0
-    #     - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_SANITIZER=On -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold"
+    #     - COMPILER=clang++-6.0
+    #     - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_SANITIZER=On"
     #   addons:
     #     apt:
-    #       sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-5.0']
-    #       packages: ['g++-6', 'clang-5.0', 'ninja-build']
+    #       sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-6.0']
+    #       packages: ['g++-6', 'clang-6.0', 'ninja-build']
 
     ###############
     # Linux : GCC #
@@ -168,72 +195,61 @@ matrix:
     # macOS : clang #
     #################
 
-    - name: "macOS xcode7.3 unit tests"
-      os: osx
-      osx_image: xcode7.3
-      compiler: clang
-      env: COMPILER=clang++
-
-    - name: "macOS xcode8 unit tests"
-      os: osx
-      osx_image: xcode8
-      compiler: clang
-      env: COMPILER=clang++
-
-    - name: "macOS xcode8.1 unit tests"
-      os: osx
-      osx_image: xcode8.1
-      compiler: clang
-      env: COMPILER=clang++
-
-    - name: "macOS xcode8.2 unit tests"
-      os: osx
-      osx_image: xcode8.2
-      compiler: clang
-      env: COMPILER=clang++
-
-    - name: "macOS xcode8.3 unit tests"
-      os: osx
+    - <<: *osx_agent
+      name: "macOS xcode8.3 unit tests"
       osx_image: xcode8.3
-      compiler: clang
-      env: COMPILER=clang++
 
-    - name: "macOS xcode9 unit tests"
-      os: osx
+    - <<: *osx_agent
+      name: "macOS xcode9 unit tests"
       osx_image: xcode9
-      compiler: clang
-      env: COMPILER=clang++
 
-    - name: "macOS xcode9.1 unit tests"
-      os: osx
+    - <<: *osx_agent
+      name: "macOS xcode9.1 unit tests"
       osx_image: xcode9.1
-      compiler: clang
-      env: COMPILER=clang++
 
-    - name: "macOS xcode9.2 unit tests"
-      os: osx
+    - <<: *osx_agent
+      name: "macOS xcode9.2 unit tests"
       osx_image: xcode9.2
-      compiler: clang
-      env: COMPILER=clang++
 
-    - name: "macOS xcode9.3 unit tests"
-      os: osx
+    - <<: *osx_agent
+      name: "macOS xcode9.3 unit tests"
       osx_image: xcode9.3
-      compiler: clang
-      env: COMPILER=clang++
 
-    - name: "macOS xcode9.4 unit tests"
-      os: osx
+    - <<: *osx_agent
+      name: "macOS xcode9.4 unit tests"
       osx_image: xcode9.4
-      compiler: clang
-      env: COMPILER=clang++
 
-    - name: "macOS xcode10 unit tests"
-      os: osx
+    - <<: *osx_agent
+      name: "macOS xcode10 unit tests"
       osx_image: xcode10
-      compiler: clang
-      env: COMPILER=clang++
 
+    ##########
+    # Deploy #
+    ##########
+
+    - <<: *deploy_agent
+      stage: deploy
+      name: "Conan Deploy"
+      if: branch = develop AND type = push
+      script: .travis/deploy_conan.sh edge
+
+    - <<: *deploy_agent
+      stage: deploy
+      name: "Conan Deploy"
+      if: branch ~= ^release/.*$ AND type = push
+      script: .travis/deploy_conan.sh prerelease
+
+    - <<: *deploy_agent
+      stage: deploy
+      name: "Conan Deploy"
+      if: branch = master AND type = push
+      script: .travis/deploy_conan.sh stable
+
+    - <<: *deploy_agent
+      stage: deploy
+      name: "Deploy Doxygen"
+      if: branch = master AND type = push
+      script: .travis/deploy_doxygen.sh
 
 ##############################################################################
 # 1. Install Step
@@ -253,11 +269,10 @@ install:
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       brew update
-
       # Some OSX versions fail if already installed, so || this with true
       brew install cmake ninja python3 || true
-      brew upgrade cmake python3 || true
-      pip3 install conan
+      brew upgrade cmake ninja python3 || true
+      python3 -m pip install conan==1.7.4
     fi
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
@@ -296,26 +311,3 @@ script:
   - cmake --build . --config Release
   - ctest -C Release -V -j --output-on-failure
   - cd ..
-
-##############################################################################
-# 3. Deploy Step
-##############################################################################
-
-deploy:
-  # Deploy testing conan packages on develop
-  - provider: script
-    script: bash .ci/deploy_conan.sh "testing" "-${TRAVIS_BUILD_NUMBER}"
-    on:
-      branch: develop
-
-  # Deploy stable conan packages on master
-  - provider: script
-    script: bash .ci/deploy_conan.sh "stable"
-    on:
-      branch: master
-
-  # Deploy doxygen documentation on master
-  - provider: script
-    script: bash .ci/deploy_doxygen.sh
-    on:
-      branch: master

@@ -18,6 +18,7 @@ if( BIT_CORE_ENABLE_SANITIZER AND NOT MSVC )
     -O2
     -fno-omit-frame-pointer
     -fsanitize=address
+    -fsanitize=leak
     -fsanitize=undefined
   )
 endif()
@@ -55,7 +56,7 @@ set(sources
 add_executable(core_test ${sources})
 
 target_link_libraries(core_test PRIVATE
-  CppBits::core
+  CppBits::Core
   Catch2::Catch2
 )
 

@@ -23,13 +23,16 @@ set(BIT_CORE_DOXYGEN_OUTPUT_PATH "${CMAKE_CURRENT_BINARY_DIR}/doxygen" CACHE STR
 # Project
 ##############################################################################
 
-project(CppBitsCore LANGUAGES CXX)
+set(BIT_CORE_VERSION_MAJOR 0 CACHE STRING "major version of CppBits::Core" FORCE)
+set(BIT_CORE_VERSION_MINOR 0 CACHE STRING "minor version of CppBits::Core" FORCE)
+set(BIT_CORE_VERSION_PATCH 1 CACHE STRING "patch version of CppBits::Core" FORCE)
 
-set(BIT_CORE_VERSION_MAJOR 0 CACHE STRING "major version of Bit::core" FORCE)
-set(BIT_CORE_VERSION_MINOR 0 CACHE STRING "minor version of Bit::core" FORCE)
-set(BIT_CORE_VERSION_PATCH 1 CACHE STRING "patch version of Bit::core" FORCE)
+set(BIT_CORE_VERSION "${BIT_CORE_VERSION_MAJOR}.${BIT_CORE_VERSION_MINOR}.${BIT_CORE_VERSION_PATCH}" CACHE STRING "version of CppBits::Core" FORCE)
 
-set(BIT_CORE_VERSION "${BIT_CORE_VERSION_MAJOR}.${BIT_CORE_VERSION_MINOR}.${BIT_CORE_VERSION_PATCH}" CACHE STRING "version of CppBits::core" FORCE)
+project(CppBitsCore
+  VERSION "${BIT_CORE_VERSION}"
+  LANGUAGES CXX
+)
 
 if( EXISTS "${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake" )
   include("${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake")
@@ -37,7 +40,7 @@ if( EXISTS "${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake" )
 endif()
 
 if( BIT_CORE_VERBOSE_CONFIGURE )
-  message(STATUS "CppBits::core ${BIT_CORE_VERSION}")
+  message(STATUS "CppBits::Core ${BIT_CORE_VERSION}")
 endif()
 
 #-----------------------------------------------------------------------------
@@ -53,7 +56,7 @@ endif()
 
 #-----------------------------------------------------------------------------
 
-if( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR
+if( "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" OR
     "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" )
   add_compile_options(-Wall -Werror -pedantic )
 elseif( "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC" )
@@ -270,12 +273,12 @@ set(inline_header_files
   include/bit/core/utilities/detail/variant.inl
 )
 
-add_library(core INTERFACE)
-add_library(CppBits::core ALIAS core)
+add_library(Core INTERFACE)
+add_library(CppBits::Core ALIAS Core)
 
-target_compile_features(core INTERFACE cxx_std_14)
+target_compile_features(Core INTERFACE cxx_std_14)
 
-target_include_directories(core INTERFACE
+target_include_directories(Core INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
   $<INSTALL_INTERFACE:include>
@@ -289,7 +292,7 @@ include(AddSelfContainmentTest)
 
 if( BIT_CORE_COMPILE_SELF_CONTAINMENT_TESTS )
   add_self_containment_test(core_self_containment_test
-    TARGET core
+    TARGET Core
     HEADERS ${header_files}
   )
   target_sources(core_self_containment_test PRIVATE ${inline_header_files})
@@ -315,8 +318,6 @@ endif()
 # Installation
 ##############################################################################
 
-set(PACKAGE_NAME "CppBitsCore")
-
 configure_file(
   "${BIT_CORE_CMAKE_TEMPLATE_PATH}/PackageConfigVersion.cmake.in"
   "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
@@ -333,7 +334,7 @@ configure_file(
 
 include(GNUInstallDirs)
 
-set(BIT_CORE_CMAKE_CONFIG_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PACKAGE_NAME}")
+set(BIT_CORE_CMAKE_CONFIG_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
 
 # Includes
 install(
@@ -347,7 +348,7 @@ install(
 
 # Targets
 install(
-  TARGETS "core"
+  TARGETS "Core"
   EXPORT "CppBitsCoreTargets"
   DESTINATION "${CMAKE_INSTALL_LIBDIR}"
 )
