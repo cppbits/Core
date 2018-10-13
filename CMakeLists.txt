@@ -31,8 +31,6 @@ set(BIT_CORE_VERSION "${BIT_CORE_VERSION_MAJOR}.${BIT_CORE_VERSION_MINOR}.${BIT_
 
 project(CppBitsCore
   VERSION "${BIT_CORE_VERSION}"
-  DESCRIPTION "Core library for the cppbits project"
-  HOMEPAGE_URL "https://github.com/cppbits/Core"
   LANGUAGES CXX
 )
 
