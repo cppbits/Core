@@ -196,14 +196,6 @@ jobs:
     #################
 
     - <<: *osx_agent
-      name: "macOS xcode8.1 unit tests"
-      osx_image: xcode8.1
-
-    - <<: *osx_agent
-      name: "macOS xcode8.2 unit tests"
-      osx_image: xcode8.2
-
-    - <<: *osx_agent
       name: "macOS xcode8.3 unit tests"
       osx_image: xcode8.3
 
