@@ -247,13 +247,13 @@ jobs:
       stage: deploy
       name: "Conan Deploy"
       if: branch = develop AND type = push
-      script: .travis/deploy_conan.sh testing
+      script: .travis/deploy_conan.sh edge
 
     - <<: *deploy_agent
       stage: deploy
       name: "Conan Deploy"
       if: branch ~= ^release/.*$ AND type = push
-      script: .travis/deploy_conan.sh stable
+      script: .travis/deploy_conan.sh prerelease
 
     - <<: *deploy_agent
       stage: deploy
