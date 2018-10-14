@@ -1,7 +1,8 @@
 # `cpp::bits` Core library
 
-[![Build Status](https://travis-ci.org/cppbits/core.svg?branch=master)](https://travis-ci.org/cppbits/Core)
-[![Github Issues](https://img.shields.io/github/issues/cppbits/core.svg)](http://github.com/cppbits/Core/issues)
+[![Travis Build Status](https://api.travis-ci.com/cppbits/Core.svg?branch=develop)](https://travis-ci.com/cppbits/Core)
+[![Appveyor Build Status](https://ci.appveyor.com/api/projects/status/g0av95jxa5fak93r/branch/develop?svg=true)](https://ci.appveyor.com/project/cppbits/Core)
+[![Github Issues](https://img.shields.io/github/issues/cppbits/Core.svg)](http://github.com/cppbits/Core/issues)
 [![Tested Compilers](https://img.shields.io/badge/compilers-gcc%20%7C%20clang%20%7C%20msvc-blue.svg)](#tested-compilers)
 [![Documentation](https://img.shields.io/badge/docs-doxygen-blue.svg)](http://cppbits.github.io/Core)
 [![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/cppbits/Core/master/LICENSE.md)
@@ -11,7 +12,29 @@
 
 The following compilers are currently being tested through continuous integration with [Travis](https://travis-ci.org/cppbits/Core) and [AppVeyor](https://ci.appveyor.com/project/cppbits/Core/)
 
-TODO: Add compilers once CI is hooked in properly
+| Compiler              | Operating System                   |
+|-----------------------|------------------------------------|
+| g++ 5.5.0             | Ubuntu 14.04.1                     |
+| g++ 6.4.0             | Ubuntu 14.04.1                     |
+| g++ 7.3.0             | Ubuntu 14.04.1                     |
+| g++ 8.1.0             | Ubuntu 14.04.1                     |
+| clang++ 3.5.0         | Ubuntu 14.04.1                     |
+| clang++ 3.6.2         | Ubuntu 14.04.1                     |
+| clang++ 3.7.1         | Ubuntu 14.04.1                     |
+| clang++ 3.8.0         | Ubuntu 14.04.1                     |
+| clang++ 3.9.1         | Ubuntu 14.04.1                     |
+| clang++ 4.0.1         | Ubuntu 14.04.1                     |
+| clang++ 5.0.2         | Ubuntu 14.04.1                     |
+| clang++ 6.0.1         | Ubuntu 14.04.1                     |
+| clang xcode 8.3       | Darwin Kernel 16.7.0               |
+| clang xcode 9.0       | Darwin Kernel 16.7.0               |
+| clang xcode 9.1       | Darwin Kernel 16.7.0               |
+| clang xcode 9.2       | Darwin Kernel 16.7.0               |
+| clang xcode 9.3       | Darwin Kernel 17.4.0               |
+| clang xcode 9.4       | Darwin Kernel 17.4.0               |
+| clang xcode 10        | Darwin Kernel 17.7.0               |
+| Visual Studio 2017    | Windows Server 2016 (x86)          |
+| Visual Studio 2017    | Windows Server 2016 (x64)          |
 
 ## <a name="license"></a>License
 
