@@ -31,6 +31,7 @@ branches:
 ##############################################################################
 
 stages:
+  - validate
   - test
   - deploy
 
@@ -57,6 +58,14 @@ deploy_agent: &deploy_agent
       sources: ['ubuntu-toolchain-r-test']
       packages: ['g++-8', 'ninja-build']
 
+validate_agent: &validate_agent
+  os: linux
+  compiler: clang
+  addons:
+    apt:
+      sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-6.0']
+      packages: ['g++-6', 'clang-6.0', 'ninja-build']
+
 ##############################################################################
 # Jobs
 ##############################################################################
@@ -68,22 +77,56 @@ jobs:
     # Linux : clang sanitizer #
     ###########################
 
-    # - name: "Linux clang++-6.0 Sanitizers"
-    #   os: linux
-    #   compiler: clang
+    - <<: *validate_agent
+      stage: validate
+      name: "Linux clang++-6.0 Undefined Behavior Sanitizer"
+      env:
+        - C_COMPILER=clang-6.0
+        - CXX_COMPILER=clang++-6.0
+        - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_UBSAN=1 -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold"
+
+    - <<: *validate_agent
+      stage: validate
+      name: "Linux clang++-6.0 Address Sanitizer"
+      env:
+        - C_COMPILER=clang-6.0
+        - CXX_COMPILER=clang++-6.0
+        - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_ASAN=1 -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold"
+
+    # - <<: *validate_agent
+    #   stage: validate
+    #   name: "Linux clang++-6.0 Memory Sanitizer"
     #   env:
-    #     - COMPILER=clang++-6.0
-    #     - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_SANITIZER=On"
-    #   addons:
-    #     apt:
-    #       sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-6.0']
-    #       packages: ['g++-6', 'clang-6.0', 'ninja-build']
+    #     - C_COMPILER=clang-6.0
+    #     - CXX_COMPILER=clang++-6.0
+    #     - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_MSAN=1 -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold"
+
+    - <<: *validate_agent
+      stage: validate
+      name: "Linux clang++-6.0 Thread Sanitizer"
+      env:
+        - C_COMPILER=clang-6.0
+        - CXX_COMPILER=clang++-6.0
+        - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_TSAN=1 -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold"
+
+    # - <<: *validate_agent
+    #   stage: validate
+    #   name: "Linux g++-8 Code Coverage"
+    #   env:
+    #     - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_COVERAGE=1"
+
+    # - <<: *validate_agent
+    #   stage: validate
+    #   name: "Linux g++-8 Valgrind"
+    #   env:
+    #     - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_VALGRIND=1"
 
     ###############
     # Linux : GCC #
     ###############
 
     - name: "Linux g++-5 unit tests"
+      stage: test
       os: linux
       compiler: gcc
       env:
@@ -95,6 +138,7 @@ jobs:
           packages: ['g++-5', 'ninja-build']
 
     - name: "Linux g++-6 unit tests"
+      stage: test
       os: linux
       compiler: gcc
       env:
@@ -106,6 +150,7 @@ jobs:
           packages: ['g++-6', 'ninja-build']
 
     - name: "Linux g++-7 unit tests"
+      stage: test
       os: linux
       compiler: gcc
       env:
@@ -117,6 +162,7 @@ jobs:
           packages: ['g++-7', 'ninja-build']
 
     - name: "Linux g++-8 unit tests"
+      stage: test
       os: linux
       compiler: gcc
       env:
@@ -132,6 +178,7 @@ jobs:
     #################
 
     - name: "Linux clang++-3.5 unit tests"
+      stage: test
       os: linux
       compiler: clang
       env:
@@ -143,6 +190,7 @@ jobs:
           packages: ['g++-6', 'clang-3.5', 'ninja-build']
 
     - name: "Linux clang++-3.6 unit tests"
+      stage: test
       os: linux
       compiler: clang
       env:
@@ -154,6 +202,7 @@ jobs:
           packages: ['g++-6', 'clang-3.6', 'ninja-build']
 
     - name: "Linux clang++-3.7 unit tests"
+      stage: test
       os: linux
       compiler: clang
       env:
@@ -165,6 +214,7 @@ jobs:
           packages: ['g++-6', 'clang-3.7', 'ninja-build']
 
     - name: "Linux clang++-3.8 unit tests"
+      stage: test
       os: linux
       compiler: clang
       env:
@@ -176,6 +226,7 @@ jobs:
           packages: ['g++-6', 'clang-3.8', 'ninja-build']
 
     - name: "Linux clang++-3.9 unit tests"
+      stage: test
       os: linux
       compiler: clang
       env:
@@ -187,6 +238,7 @@ jobs:
           packages: ['g++-6', 'clang-3.9', 'ninja-build']
 
     - name: "Linux clang++-4.0 unit tests"
+      stage: test
       os: linux
       compiler: clang
       env:
@@ -198,6 +250,7 @@ jobs:
           packages: ['g++-6', 'clang-4.0', 'ninja-build']
 
     - name: "Linux clang++-5.0 unit tests"
+      stage: test
       os: linux
       compiler: clang
       env:
@@ -209,6 +262,7 @@ jobs:
           packages: ['g++-6', 'clang-5.0', 'ninja-build']
 
     - name: "Linux clang++-6.0 unit tests"
+      stage: test
       os: linux
       compiler: clang
       env:
@@ -224,30 +278,37 @@ jobs:
     #################
 
     - <<: *osx_agent
+      stage: test
       name: "macOS xcode8.3 unit tests"
       osx_image: xcode8.3
 
     - <<: *osx_agent
+      stage: test
       name: "macOS xcode9 unit tests"
       osx_image: xcode9
 
     - <<: *osx_agent
+      stage: test
       name: "macOS xcode9.1 unit tests"
       osx_image: xcode9.1
 
     - <<: *osx_agent
+      stage: test
       name: "macOS xcode9.2 unit tests"
       osx_image: xcode9.2
 
     - <<: *osx_agent
+      stage: test
       name: "macOS xcode9.3 unit tests"
       osx_image: xcode9.3
 
     - <<: *osx_agent
+      stage: test
       name: "macOS xcode9.4 unit tests"
       osx_image: xcode9.4
 
     - <<: *osx_agent
+      stage: test
       name: "macOS xcode10 unit tests"
       osx_image: xcode10
 
