@@ -31,8 +31,8 @@ branches:
 ##############################################################################
 
 stages:
-  - validate
   - test
+  - validate
   - deploy
 
 ##############################################################################
@@ -109,17 +109,18 @@ jobs:
         - CXX_COMPILER=clang++-6.0
         - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_TSAN=1 -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold"
 
-    # - <<: *validate_agent
-    #   stage: validate
-    #   name: "Linux g++-8 Code Coverage"
-    #   env:
-    #     - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_COVERAGE=1"
-
-    # - <<: *validate_agent
-    #   stage: validate
-    #   name: "Linux g++-8 Valgrind"
-    #   env:
-    #     - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_VALGRIND=1"
+    - stage: validate
+      name: "Linux g++-7 Code Coverage"
+      env:
+        - C_COMPILER=gcc-7
+        - CXX_COMPILER=g++-7
+        - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_COVERAGE=1"
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-7', 'ninja-build']
+      after_success:
+        - coveralls --build-root "$(pwd)/${build_directory}" -E ".*CMakeFiles.*" -e test -e test_package --gcov 'gcov-7' --gcov-options '\-lpr'
 
     ###############
     # Linux : GCC #
@@ -363,6 +364,8 @@ install:
       sudo python3 -m pip install --upgrade --force setuptools
       sudo python3 -m pip install --upgrade --force pip
       python3 -m pip install --user conan
+      # This could be optimized by only installing on coveralls step...
+      python3 -m pip install --user cpp-coveralls==0.3.11
     fi
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then

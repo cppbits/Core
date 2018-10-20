@@ -94,7 +94,7 @@ endif()
 # Code Coverage
 ##############################################################################
 
-if( BIT_CORE_ENABLE_COVERAGE AND NOT MSVC )
+if( BIT_CORE_ENABLE_COVERAGE )
   assert_clang_or_gcc()
 
   add_compile_options(
@@ -102,7 +102,9 @@ if( BIT_CORE_ENABLE_COVERAGE AND NOT MSVC )
     -O0
     -fprofile-arcs
     -ftest-coverage
+    --coverage
   )
+  link_libraries(--coverage)
 endif()
 
 ##############################################################################

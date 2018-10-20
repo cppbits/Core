@@ -2,6 +2,7 @@
 
 [![Travis Build Status](https://api.travis-ci.com/cppbits/Core.svg?branch=develop)](https://travis-ci.com/cppbits/Core)
 [![Appveyor Build Status](https://ci.appveyor.com/api/projects/status/g0av95jxa5fak93r/branch/develop?svg=true)](https://ci.appveyor.com/project/cppbits/Core)
+[![Coverage Status](https://coveralls.io/repos/github/cppbits/Core/badge.svg?branch=develop)](https://coveralls.io/github/cppbits/Core?branch=develop)
 [![Github Issues](https://img.shields.io/github/issues/cppbits/Core.svg)](http://github.com/cppbits/Core/issues)
 [![Tested Compilers](https://img.shields.io/badge/compilers-gcc%20%7C%20clang%20%7C%20msvc-blue.svg)](#tested-compilers)
 [![Documentation](https://img.shields.io/badge/docs-doxygen-blue.svg)](http://cppbits.github.io/Core)
