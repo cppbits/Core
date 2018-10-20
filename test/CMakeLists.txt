@@ -4,23 +4,107 @@ cmake_minimum_required(VERSION 3.1)
 # Test Options
 ##############################################################################
 
-option(BIT_CORE_ENABLE_SANITIZER "Compile and run with sanitizers" OFF)
+option(BIT_CORE_ENABLE_MSAN "Compile and run with memory sanitizers" OFF)
+option(BIT_CORE_ENABLE_ASAN "Compile and run with address sanitizers" OFF)
+option(BIT_CORE_ENABLE_UBSAN "Compile and run with undefined behavior sanitizers" OFF)
+option(BIT_CORE_ENABLE_TSAN "Compile and run with thread sanitizers" OFF)
 option(BIT_CORE_ENABLE_COVERAGE "Compile with coverage information" OFF)
 option(BIT_CORE_ENABLE_VALGRIND "Compile and run with valgrind" OFF)
+
+##############################################################################
+# Utilities
+##############################################################################
+
+function(assert_clang_or_gcc)
+  if( NOT ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" OR
+           "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") )
+    message(FATAL_ERROR "Sanitizers require either GCC or clang.")
+  endif()
+endfunction()
+
+##############################################################################
+# Memory Sanitizer
+##############################################################################
+
+if( BIT_CORE_ENABLE_MSAN )
+  assert_clang_or_gcc()
+
+  add_compile_options(
+    -g
+    -O2
+    -fno-omit-frame-pointer
+    -fsanitize=memory
+  )
+  link_libraries(
+    -fsanitize=memory
+  )
+endif()
 
 ##############################################################################
 # Address Sanitizer
 ##############################################################################
 
-if( BIT_CORE_ENABLE_SANITIZER AND NOT MSVC )
+if( BIT_CORE_ENABLE_ASAN )
+  assert_clang_or_gcc()
+
   add_compile_options(
     -g
-    -O2
+    -O1
     -fno-omit-frame-pointer
     -fsanitize=address
     -fsanitize=leak
+  )
+  link_libraries(
+    -fsanitize=address
+    -fsanitize=leak
+  )
+endif()
+
+##############################################################################
+# UB Sanitizer
+##############################################################################
+
+if( BIT_CORE_ENABLE_UBSAN )
+  assert_clang_or_gcc()
+
+  add_compile_options(
     -fsanitize=undefined
   )
+  link_libraries(
+    -fsanitize=undefined
+  )
+endif()
+
+##############################################################################
+# Thread Sanitizer
+##############################################################################
+
+if( BIT_CORE_ENABLE_UBSAN )
+  assert_clang_or_gcc()
+
+  add_compile_options(
+    -fsanitize=thread
+  )
+  link_libraries(
+    -fsanitize=thread
+  )
+endif()
+
+##############################################################################
+# Code Coverage
+##############################################################################
+
+if( BIT_CORE_ENABLE_COVERAGE )
+  assert_clang_or_gcc()
+
+  add_compile_options(
+    -g
+    -O0
+    -fprofile-arcs
+    -ftest-coverage
+    --coverage
+  )
+  link_libraries(--coverage)
 endif()
 
 ##############################################################################
