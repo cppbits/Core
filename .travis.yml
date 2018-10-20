@@ -73,55 +73,6 @@ validate_agent: &validate_agent
 jobs:
   include:
 
-    ###########################
-    # Linux : clang sanitizer #
-    ###########################
-
-    - <<: *validate_agent
-      stage: validate
-      name: "Linux clang++-6.0 Undefined Behavior Sanitizer"
-      env:
-        - C_COMPILER=clang-6.0
-        - CXX_COMPILER=clang++-6.0
-        - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_UBSAN=1 -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold"
-
-    - <<: *validate_agent
-      stage: validate
-      name: "Linux clang++-6.0 Address Sanitizer"
-      env:
-        - C_COMPILER=clang-6.0
-        - CXX_COMPILER=clang++-6.0
-        - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_ASAN=1 -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold"
-
-    # - <<: *validate_agent
-    #   stage: validate
-    #   name: "Linux clang++-6.0 Memory Sanitizer"
-    #   env:
-    #     - C_COMPILER=clang-6.0
-    #     - CXX_COMPILER=clang++-6.0
-    #     - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_MSAN=1 -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold"
-
-    - <<: *validate_agent
-      stage: validate
-      name: "Linux clang++-6.0 Thread Sanitizer"
-      env:
-        - C_COMPILER=clang-6.0
-        - CXX_COMPILER=clang++-6.0
-        - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_TSAN=1 -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold"
-
-    - stage: validate
-      name: "Linux g++-7 Code Coverage"
-      env:
-        - C_COMPILER=gcc-7
-        - CXX_COMPILER=g++-7
-        - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_COVERAGE=1"
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-7', 'ninja-build']
-      after_success:
-        - coveralls --build-root "$(pwd)/${build_directory}" -E ".*CMakeFiles.*" -e test -e test_package --gcov 'gcov-7' --gcov-options '\-lpr'
-
     ###############
     # Linux : GCC #
     ###############
@@ -340,6 +291,58 @@ jobs:
       name: "Deploy Doxygen"
       if: branch = master AND type = push
       script: .travis/deploy_doxygen.sh
+
+
+    ###########################
+    # Linux : clang sanitizer #
+    ###########################
+
+    - <<: *validate_agent
+      stage: validate
+      name: "Linux clang++-6.0 Undefined Behavior Sanitizer"
+      env:
+        - C_COMPILER=clang-6.0
+        - CXX_COMPILER=clang++-6.0
+        - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_UBSAN=1 -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold"
+
+    - <<: *validate_agent
+      stage: validate
+      name: "Linux clang++-6.0 Address Sanitizer"
+      env:
+        - C_COMPILER=clang-6.0
+        - CXX_COMPILER=clang++-6.0
+        - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_ASAN=1 -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold"
+
+    # - <<: *validate_agent
+    #   stage: validate
+    #   name: "Linux clang++-6.0 Memory Sanitizer"
+    #   env:
+    #     - C_COMPILER=clang-6.0
+    #     - CXX_COMPILER=clang++-6.0
+    #     - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_MSAN=1 -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold"
+
+    - <<: *validate_agent
+      stage: validate
+      name: "Linux clang++-6.0 Thread Sanitizer"
+      env:
+        - C_COMPILER=clang-6.0
+        - CXX_COMPILER=clang++-6.0
+        - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_TSAN=1 -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold"
+
+    - stage: validate
+      name: "Linux g++-7 Code Coverage"
+      os: linux
+      compiler: gcc
+      env:
+        - C_COMPILER=gcc-7
+        - CXX_COMPILER=g++-7
+        - CMAKE_OPTIONS="-DBIT_CORE_ENABLE_COVERAGE=1"
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-7', 'ninja-build']
+      after_success:
+        - coveralls --build-root "$(pwd)/${build_directory}" -E ".*CMakeFiles.*" -e test -e test_package --gcov 'gcov-7' --gcov-options '\-lpr'
 
 ##############################################################################
 # 1. Install Step
