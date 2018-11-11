@@ -130,6 +130,12 @@
 # define BIT_ASSERT(...) ((void)0)
 #endif
 
+#ifdef BIT_DEBUG
+# define BIT_ASSERT_AND_ASSUME(cond) BIT_ASSERT(cond)
+#else
+# define BIT_ASSERT_AND_ASSUME(cond) BIT_ASSUME(cond)
+#endif
+
 //! \def BIT_ASSERT_OR_THROW(condition, exception, message)
 //!
 //! \brief An assertion that either throws the given exception, if exceptions
