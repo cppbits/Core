@@ -115,6 +115,7 @@ find_package(Catch2 REQUIRED)
 
 set(sources
       # utilities
+      src/bit/core/utilities/any.test.cpp
       src/bit/core/utilities/compressed_pair.test.cpp
       src/bit/core/utilities/delegate.test.cpp
       src/bit/core/utilities/lazy.test.cpp
