@@ -422,10 +422,12 @@ inline void bit::core::any::swap( any& other )
     // tmp := self
     tmp.m_storage_handler = m_storage_handler;
     m_storage_handler( operation::move, &tmp.m_storage, &m_storage );
+    m_storage_handler( operation::destroy, &m_storage, nullptr );
 
     // self := other
     m_storage_handler = other.m_storage_handler;
     m_storage_handler( operation::move, &m_storage, &other.m_storage );
+    m_storage_handler( operation::destroy, &other.m_storage, nullptr );
 
     // other := tmp
     other.m_storage_handler = tmp.m_storage_handler;
