@@ -37,13 +37,6 @@ namespace {
     char buffer[sizeof(bit::core::any)];
   };
 
-  // TODO(bitwize): If this (fragile) assertion doesn't hold, unit tests will
-  //   need to be run against fixed-sized types to avoid implementation
-  //   variance.
-  static_assert( sizeof(std::string) <= (sizeof(void*)*4),
-                 "sanity check: std::string is used for checking small-buffer "
-                 "for 'any' type");
-
 } // anonymous namespace
 
 //=============================================================================
